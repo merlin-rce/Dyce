@@ -1,46 +1,12 @@
+## Quick start with the exemple
 
-This directory is intended for project specific (private) libraries.
-PlatformIO will compile them to static libraries and link into the executable file.
+1. Wire the encoder: pin A and pin B to two GPIOs, the third pin to GND.
+2. Copy the `Encoder_lib/` folder into your project's `lib/` folder.
+3. Copy the Encoder_Exemple.cpp in your src
 
-The source code of each library should be placed in a separate directory
-("lib/your_library_name/[Code]").
+## Content
 
-For example, see the structure of the following example libraries `Foo` and `Bar`:
-
-|--lib
-|  |
-|  |--Bar
-|  |  |--docs
-|  |  |--examples
-|  |  |--src
-|  |     |- Bar.c
-|  |     |- Bar.h
-|  |  |- library.json (optional. for custom build options, etc) https://docs.platformio.org/page/librarymanager/config.html
-|  |
-|  |--Foo
-|  |  |- Foo.c
-|  |  |- Foo.h
-|  |
-|  |- README --> THIS FILE
-|
-|- platformio.ini
-|--src
-   |- main.c
-
-Example contents of `src/main.c` using Foo and Bar:
-```
-#include <Foo.h>
-#include <Bar.h>
-
-int main (void)
-{
-  ...
-}
-
-```
-
-The PlatformIO Library Dependency Finder will find automatically dependent
-libraries by scanning project source files.
-
-More information about PlatformIO Library Dependency Finder
-- https://docs.platformio.org/page/librarymanager/ldf.html
+- **`Encoder.h`** the public interface (what you `#include`) and the doc.
+- **`Encoder.cpp`** the implementation (the actual logic).
+- **`Encoder_Exemple.cpp`**  a ready-to-run example that print in serial -> Clockwise/Counterclockwise.
+Simply Copy its contents into your `src/main.cpp` to test the library right away.
