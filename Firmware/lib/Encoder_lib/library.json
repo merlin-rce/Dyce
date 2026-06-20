@@ -1,0 +1,11 @@
+{
+  "name": "Encoder_lib",
+  "version": "1.0.0",
+  "description": "Simple non-blocking rotary encoder library with time-based debounce. By Merlin Racine.",
+  "keywords": "encoder, rotary, non-blocking",
+  "authors": [
+    { "name": "Merlin Racine", "url": "https://github.com/Merlin-rce" }
+  ],
+  "frameworks": "arduino",
+  "platforms": "espressif32"
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DYCE — simulator</title>
+<link rel="icon" href="assets/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1 style="margin:0"><img src="assets/logo.png" alt="DYCE" style="height:58px;vertical-align:middle"></h1>
+    <p class="sub">interactive simulator · <a href="gallery.html">gallery &#8594;</a></p>
+
+    <div class="stage">
+      <div id="device" class="device encoder">
+        <img class="body" src="assets/device_body.png" alt="" draggable="false">
+        <canvas id="screen" width="480" height="480"></canvas>
+        <button id="pwr" class="pwr-btn" title="Power on / off"></button>
+      </div>
+
+      <div id="pwrHint" class="pwr-hint">On / Off <span class="arrow">&#8594;</span></div>
+
+      <button id="gear" class="gear" title="Settings" aria-label="Settings">&#9881;</button>
+      <div id="settings" class="settings hidden">
+        <p class="settings-title">Control mode</p>
+        <label><input type="radio" name="mode" value="encoder" checked> Encoder — drag the ring</label>
+        <label><input type="radio" name="mode" value="mouse"> Mouse — scroll wheel</label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="info" class="info-btn" aria-label="How it works">?</button>
+      <a class="gh" href="https://github.com/merlin-rce" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      github.com/merlin-rce
+      </a>
+    </div>
+
+    <div id="infocard" class="infocard hidden">
+      <p><b>Drag the ring</b> to spin — or scroll the wheel (see&nbsp;&#9881;).</p>
+      <p><b>Spin up</b> &rarr; charge &amp; roll · <b>spin down</b> &rarr; change the odds.</p>
+      <p><b>Pause around &#8532;</b> &rarr; a little hidden surprise.</p>
+      <p>The <b>side button</b> powers it on / off.</p>
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
