@@ -97,7 +97,23 @@ static void blit(const unsigned short* img, int w, int h, int ox, int oy, int al
         }
 }
 static void drawLogo(int ox, int oy, int alpha) { blit(LOGO, LOGO_W, LOGO_H, ox, oy, alpha); }
-static void drawIcon(int ox, int oy, int alpha) { blit(ICON, ICON_W, ICON_H, ox, oy, alpha); }
+
+// blit une image redimensionnee (nearest-neighbor), centree sur (cx, cy). Sert a
+// afficher le petit "D" du mode attente plus compact, pour qu'il ne deborde pas
+// sur le texte des conseils.
+static void blitScaled(const unsigned short* img, int w, int h, int dw, int dh, int cx, int cy, int alpha) {
+    int ox = cx - dw / 2, oy = cy - dh / 2;
+    for (int y = 0; y < dh; y++)
+        for (int x = 0; x < dw; x++) {
+            uint16_t c = img[(y * h / dh) * w + (x * w / dw)];
+            if (alpha < 100) c = melange(FOND, c, alpha);
+            spr.drawPixel(ox + x, oy + y, c);
+        }
+}
+// le "D" du mode attente : ~62 % de sa taille, centre en haut (laisse la place aux conseils)
+static void drawAttractIcon(int cx, int cy, int alpha) {
+    blitScaled(ICON, ICON_W, ICON_H, (ICON_W * 62) / 100, (ICON_H * 62) / 100, cx, cy, alpha);
+}
 
 // dessine l'anneau gris de fond (toujours present) + la partie remplie
 static void dessineAnneau(const DiceView& v, uint32_t ms, int pulse, bool rainbow) {
@@ -183,9 +199,9 @@ static const char* CONSEILS[] = {
 };
 static const int NB_CONSEILS = 4;
 
-void ui_begin() {
+void ui_begin(int Rotation) {
     tft.init();
-    tft.setRotation(0);
+    tft.setRotation(Rotation);
     spr.setColorDepth(16);
     spr.createSprite(240, 240);                                       // tampon plein ecran (PSRAM)
 }
@@ -241,7 +257,7 @@ void ui_draw(const DiceView& v) {
     // ----- au repos : juste l'icone "D" en haut, et l'ADVICE en gros (element principal).
     //        Le 1er ("Spin to roll") reste plus longtemps. -----
     if (v.attractFade > 0) {
-        drawIcon(120 - ICON_W / 2, 40, v.attractFade);   // le "D" seul, en haut
+        drawAttractIcon(120, 56, v.attractFade);         // le "D" seul, plus petit, en haut
         int age = v.attractAge, idx, t, per;
         if (age < FIRST_MS) { idx = 0;                            per = FIRST_MS; t = age; }
         else { int k = (age - FIRST_MS) / 5000; idx = (k + 1) % NB_CONSEILS; per = 5000; t = (age - FIRST_MS) % 5000; }

@@ -12,10 +12,6 @@
 //   equiprobable (un simple "% n" serait legerement biaise).
 // ============================================================
 
-void rng_begin() {
-    // esp_random() est disponible directement : rien a initialiser.
-}
-
 int rng_roll(int n) {
     if (n < 2) return n;
     uint32_t rejet = (uint32_t)(0x100000000ULL % (uint32_t)n);   // 2^32 mod n

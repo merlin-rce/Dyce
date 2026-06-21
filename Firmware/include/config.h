@@ -1,6 +1,8 @@
 #pragma once
 
 // ===== Reglages DYCE =====
+//Screen rotation (0, 1, 2, 3) : 0 = portrait, 1 = paysage, 2 = portrait inverse, 3 = paysage inverse
+#define SCREEN_ROTATION 0
 
 // Broches encodeur
 #define PIN_ENC_A 6

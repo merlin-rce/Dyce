@@ -7,10 +7,11 @@ enclosure ideas, docs, typos, anything.
 ## Repo layout
 
 ```
-Firmware/   ESP32-S3 firmware (PlatformIO) — main.cpp, dice.*, ui.*, rng.*, config.h
-Dyce/       web simulator (the live demo)
-Media/      renders, photos, Gallery.md
-PCB/        schematic (PDF)
+Firmware/          ESP32-S3 firmware (PlatformIO) — main.cpp, dice.*, ui.*, rng.*, config.h
+Web simulation/    web simulator (the live demo)
+3D Files/          printable STL enclosure parts
+PCB/               schematic (PDF) + Fabrication/ (Gerbers & drill files)
+Media/             renders, photos, Gallery.md
 ```
 
 ## Build the firmware

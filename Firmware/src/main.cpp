@@ -13,9 +13,8 @@
 Encoder enc(PIN_ENC_A, PIN_ENC_B);   // encodeur en anneau
 
 void setup() {
-    Serial.begin(115200);
-    rng_begin();      // hasard materiel (esp_random)
-    ui_begin();       // ecran + sprite plein ecran
+    Serial.begin(115200);     // hasard materiel (esp_random)
+    ui_begin(SCREEN_ROTATION);       // ecran + sprite plein ecran
     enc.begin();
     dice_begin();     // premier tirage + intro
 }
