@@ -72,6 +72,14 @@ That's exactly what it's here for. If you make a variation, I'd love to see it.
 > coming soon**, every part, every solder joint, start to finish, so anyone can make
 > their own. Watch this repo to catch it when it drops.
 
+## a bit of honesty
+
+quick honest part: im 17 and still a student, and this started as a school project. im a beginner and i learn as i go, thats honestly the whole point of this for me. i put it open source because i genuinely want people to look at it, give me feedback and teach me things, im always down to learn and get better.
+
+the hardware is fully me: the pcb, the schematic, picking the parts, the cad, the soldering and all the debugging that comes with it. pretty proud of that part. the web simulator was mostly built with claude (ai) since my react/html is still basic. for the firmware i use ai to help me too, but as a beginner i really try to understand what im doing and learn from it, not just blindly copy paste.
+
+and if you notice theres barely any commits, its just cause im still new to github and kinda pushed everything at once. still learning that part too :)
+
 ## Contribute
 
 This is a learning project and **feedback / PRs are genuinely welcome**: schematic
