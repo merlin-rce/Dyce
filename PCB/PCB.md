@@ -1,14 +1,15 @@
 # DYCE PCB
-
-<div align="center">
-<img src="preview.png" width="440" alt="DYCE PCB">
-</div>
-
 ---
 
 The custom board that runs DYCE: a single round PCB sized to sit behind the screen,
 hand-soldered and **powered up first try**. **100% offline**: no Wi-Fi, no radios used
 for the game, randomness comes straight from the ESP32 hardware RNG.
+<div align="center">
+<img src="../Media/PCB/Dyce_Bottom_VIEW.png" alt="DYCE Bottom VIEW">
+<img src="../Media/PCB/Dyce_Top_VIEW.png" alt="DYCE Top VIEW">
+</div>
+
+
 
 ## What's on it
 
