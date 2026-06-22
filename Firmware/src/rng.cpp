@@ -2,14 +2,14 @@
 #include "esp_random.h"
 
 // ============================================================
-// Hasard de DYCE - 100% hors-ligne.
+// DYCE randomness - 100% offline.
 //
-//   esp_random() = generateur ALEATOIRE MATERIEL de l'ESP32-S3 (bruit
-//   electrique interne). C'est du vrai hasard, sans reseau ni dependance.
+//   esp_random() = HARDWARE RANDOM generator of the ESP32-S3 (internal
+//   electrical noise). It's real randomness, no network, no dependency.
 //
-//   rng_roll(n) fait du "rejection sampling" : on jette les rares tirages du
-//   haut qui ne tombent pas juste, pour que chaque valeur 1..n soit EXACTEMENT
-//   equiprobable (un simple "% n" serait legerement biaise).
+//   rng_roll(n) does "rejection sampling" : we throw away the rare high
+//   draws that don't land right, so each value 1..n is EXACTLY
+//   equally likely (a plain "% n" would be slightly biased).
 // ============================================================
 
 int rng_roll(int n) {

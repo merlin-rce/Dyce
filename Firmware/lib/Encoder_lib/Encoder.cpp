@@ -1,13 +1,13 @@
 #include "Encoder.h"
 #include "driver/gpio.h"
 
-// Un cran d'un encodeur mecanique classique = un cycle complet = 4 fronts.
-// Mets 2 si ton encodeur demande deux clics pour un pas.
+// One notch of a classic mechanical encoder = one full cycle = 4 edges.
+// Set 2 if your encoder needs two clicks for one step.
 static const int DETENT = 4;
 
-// Table de quadrature standard.
-// index = (etat precedent << 2) | etat courant, valeur = sens
-// (0 = transition impossible -> rejette les rebonds).
+// Standard quadrature table.
+// index = (previous state << 2) | current state, value = direction
+// (0 = impossible transition -> rejects bounces).
 static const int8_t QTABLE[16] = {
    0, +1, -1,  0,
   -1,  0,  0, +1,
@@ -33,7 +33,7 @@ void IRAM_ATTR Encoder::isr(void* arg)
   static_cast<Encoder*>(arg)->handle();
 }
 
-// appele a chaque front sur A ou B
+// called on every edge on A or B
 void IRAM_ATTR Encoder::handle()
 {
   uint8_t s = (uint8_t)((gpio_get_level((gpio_num_t)_pinA) << 1) |

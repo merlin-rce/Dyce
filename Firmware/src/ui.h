@@ -1,6 +1,6 @@
 #pragma once
-#include "dice.h"   // pour DiceView
+#include "dice.h"   // for DiceView
 
-// Affichage sur l'ecran rond (anneau de charge). Tout dans un sprite plein ecran.
-void ui_begin(int Rotation);   // init ecran + sprite plein ecran
+// Display on the round screen (charge ring). Everything in a fullscreen sprite.
+void ui_begin(int Rotation);   // init screen + fullscreen sprite
 void ui_draw(const DiceView& v);

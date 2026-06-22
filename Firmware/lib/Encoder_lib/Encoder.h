@@ -3,51 +3,51 @@
 #include <Arduino.h>
 
 // ============================================================
-// Librairie encodeur rotatif mecanique.
-// par Merlin Racine 2026 (@merlin-rce)
+// Mechanical rotary encoder library.
+// by Merlin Racine 2026 (@merlin-rce)
 // ============================================================
 //
-// Ce que ca fait :
-//   Tu tournes le bouton -> read() dit dans quel sens.
-//   Un cran = un pas.   +1 = horaire,  -1 = anti-horaire,  0 = rien.
+// What it does :
+//   You turn the knob -> read() tells which way.
+//   One notch = one step.   +1 = clockwise,  -1 = counter-clockwise,  0 = nothing.
 //
-// Comment ca marche :
-//   Les deux lignes A/B sont lues sur interruption et decodees avec la table
-//   de quadrature standard. Chaque front est capture (le spin rapide n'est
-//   jamais rate) et les transitions impossibles/rebonds sont rejetees.
-//   read() est non-bloquant : il sort juste un cran a la fois.
+// How it works :
+//   The two A/B lines are read on interrupt and decoded with the standard
+//   quadrature table. Every edge is captured (a fast spin is never
+//   missed) and impossible transitions/bounces are rejected.
+//   read() is non-blocking : it just outputs one notch at a time.
 //
-// Utilisation :
-//   Encoder enc(6, 5);   // broche A = 6, broche B = 5
-//   enc.begin();         // une fois dans setup()
-//   int pas = enc.read();   // dans loop(), aussi souvent que tu veux
+// Usage :
+//   Encoder enc(6, 5);   // pin A = 6, pin B = 5
+//   enc.begin();         // once in setup()
+//   int pas = enc.read();   // in loop(), as often as you want
 //
-// Cablage :
-//   Broche A et broche B sur l'encodeur, la 3eme (commune) a GND.
-//   Pas de resistances externes (pull-ups internes utilises).
+// Wiring :
+//   Pin A and pin B on the encoder, the 3rd (common) to GND.
+//   No external resistors (internal pull-ups used).
 //
-// Plusieurs encodeurs : fais plusieurs objets, chacun ses broches.
+// Multiple encoders : make several objects, each with its own pins.
 // ============================================================
 
 class Encoder {
 public:
-  // debounceMs garde pour compatibilite ; la quadrature le rend inutile (ignore).
+  // debounceMs kept for compatibility ; quadrature makes it useless (ignored).
   Encoder(uint8_t pinA, uint8_t pinB, unsigned long debounceMs = 0);
 
-  // A appeler une fois dans setup(). Configure les broches et les interruptions.
+  // Call once in setup(). Sets up the pins and the interrupts.
   void begin();
 
-  // A appeler le plus souvent possible dans loop().
-  // Retourne +1 (horaire), -1 (anti-horaire) ou 0 (rien). Un cran par appel.
+  // Call as often as possible in loop().
+  // Returns +1 (clockwise), -1 (counter-clockwise) or 0 (nothing). One notch per call.
   int read();
 
 private:
   uint8_t          _pinA;
   uint8_t          _pinB;
-  volatile int32_t _count;     // comptes bruts de quadrature (DETENT par cran)
-  volatile uint8_t _state;     // dernier etat (A<<1 | B)
-  portMUX_TYPE     _mux;       // pour proteger _count et _state dans les interruptions
+  volatile int32_t _count;     // raw quadrature counts (DETENT per notch)
+  volatile uint8_t _state;     // last state (A<<1 | B)
+  portMUX_TYPE     _mux;       // to protect _count and _state inside the interrupts
 
-  void IRAM_ATTR handle();      // appele a chaque front sur A ou B
-  static void IRAM_ATTR isr(void* arg); // trampoline pour appeler handle() avec le bon "this"
+  void IRAM_ATTR handle();      // called on every edge on A or B
+  static void IRAM_ATTR isr(void* arg); // trampoline to call handle() with the right "this"
 };

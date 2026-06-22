@@ -3,47 +3,47 @@
 #include "rng.h"
 #include <Arduino.h>
 
-// Le jeu passe par 4 phases :
-//   INTRO    : l'animation de demarrage
-//   ATTRACT  : au repos (pas de nombre), on montre des conseils
-//   CHARGE   : on tourne pour remplir l'anneau
-//   REVEAL   : l'anneau est plein -> on montre le nombre tire
+// The game goes through 4 phases :
+//   INTRO    : the startup animation
+//   ATTRACT  : idle (no number), we show tips
+//   CHARGE   : you turn to fill the ring
+//   REVEAL   : the ring is full -> we show the rolled number
 enum { INTRO, ATTRACT, CHARGE, REVEAL };
 
 static int      nombre   = 7;
-static int      indexN   = N_START;   // 0..N_COUNT ; N_COUNT = categorie Contact
-static int      charge   = 0;         // remplissage vise 0..100
-static int      affiche  = 0;         // remplissage montre (suit "charge" en douceur)
+static int      indexN   = N_START;   // 0..N_COUNT ; N_COUNT = Contact category
+static int      charge   = 0;         // target fill 0..100
+static int      affiche  = 0;         // shown fill (smoothly follows "charge")
 static int      flash    = 0;
 static int      phase    = INTRO;
-static bool     special  = false;     // le 67 secret
-static bool     montre   = false;     // y a-t-il un nombre a afficher ?
+static bool     special  = false;     // the secret 67
+static bool     montre   = false;     // is there a number to show ?
 static uint32_t introStart   = 0;
 static uint32_t revDebut     = 0;
-static int      revMs        = 0;     // duree de la phase REVEAL en cours
-static uint32_t tRoll        = 0;     // moment du dernier tirage (pour le cooldown)
-static uint32_t zoneDebut    = 0;     // depuis quand on est dans la zone 2/3 (0 = dehors)
-static uint32_t lastInput    = 0;     // derniere action sur l'encodeur
-static uint32_t attractStart = 0;     // moment ou on est passe en attente
-static uint32_t attractLeft  = 0;     // moment ou on a quitte l'attente
-static uint32_t specialStart = 0;     // moment ou le 67 secret est apparu
+static int      revMs        = 0;     // duration of the current REVEAL phase
+static uint32_t tRoll        = 0;     // time of the last roll (for the cooldown)
+static uint32_t zoneDebut    = 0;     // since when we're in the 2/3 zone (0 = outside)
+static uint32_t lastInput    = 0;     // last action on the encoder
+static uint32_t attractStart = 0;     // time when we went idle
+static uint32_t attractLeft  = 0;     // time when we left idle
+static uint32_t specialStart = 0;     // time when the secret 67 appeared
 
-static bool enContact() { return indexN == N_COUNT; }   // derniere categorie = QR
+static bool enContact() { return indexN == N_COUNT; }   // last category = QR
 
-// Taille du pas : grand quand l'anneau est bas, petit quand il est haut.
+// Step size : big when the ring is low, small when it's high.
 static int pas() {
     int p = STEP_MIN_INC + (STEP_MAX_INC - STEP_MIN_INC) * (100 - charge) / 100;
-    p += (int)rng_roll(3) - 2;          // un peu d'irregularite
+    p += (int)rng_roll(3) - 2;          // a bit of irregularity
     return p < 1 ? 1 : p;
 }
 
-// Retour au repos (efface le nombre, lance le fondu des conseils).
+// Back to idle (clears the number, starts the tips fade).
 static void versAttente() {
     phase = ATTRACT; attractStart = millis();
     special = false; montre = false; charge = 0; affiche = 0;
 }
 
-// Tirage normal quand l'anneau est plein.
+// Normal roll when the ring is full.
 static void lanceReveal() {
     nombre  = rng_roll(N_VALUES[indexN]);
     special = false; montre = true; revMs = REVEAL_MS;
@@ -51,8 +51,8 @@ static void lanceReveal() {
     flash = 100; zoneDebut = 0;
 }
 
-// Menu cache : on l'ouvre en s'arretant vers 2/3 (pas besoin de finir l'anneau).
-// Il montre 67 pendant 6 s puis revient tout seul au repos.
+// Hidden menu : you open it by stopping around 2/3 (no need to finish the ring).
+// It shows 67 for 6 s then goes back to idle on its own.
 static void lanceSecret() {
     nombre = 67; special = true; montre = true; specialStart = millis();
     revMs = HEHE_MS;
@@ -68,18 +68,18 @@ void dice_begin() {
 
 void dice_input(int sens) {
     lastInput = millis();
-    if (phase == INTRO) phase = ATTRACT;        // un geste saute l'intro
+    if (phase == INTRO) phase = ATTRACT;        // a gesture skips the intro
 
-    if (sens > 0) {                             // horaire : remplir l'anneau
-        if (enContact()) return;                // dans Contact on ne tire pas
-        if (millis() - tRoll < COOLDOWN_MS) return;       // petite tempo apres un tirage
-        if (phase == REVEAL || phase == ATTRACT) {        // on (re)part d'un anneau vide
+    if (sens > 0) {                             // clockwise : fill the ring
+        if (enContact()) return;                // in Contact we don't roll
+        if (millis() - tRoll < COOLDOWN_MS) return;       // small delay after a roll
+        if (phase == REVEAL || phase == ATTRACT) {        // we (re)start from an empty ring
             if (phase == ATTRACT) attractLeft = millis();
             phase = CHARGE; charge = 0; affiche = 0;
         }
         charge += pas();
         if (charge >= 100) { charge = 100; lanceReveal(); }
-    } else if (sens < 0) {                       // anti-horaire : changer de categorie
+    } else if (sens < 0) {                       // counter-clockwise : change category
         indexN = (indexN + 1) % (N_COUNT + 1);   // ... 99 -> Contact -> 2 ...
     }
 }
@@ -91,11 +91,11 @@ void dice_update() {
     }
 
     if (phase == CHARGE) {
-        // l'affichage suit la cible en douceur
+        // the display smoothly follows the target
         if (affiche < charge) { affiche += FILL_SPEED; if (affiche > charge) affiche = charge; }
         if (affiche > charge) { affiche -= FILL_SPEED; if (affiche < charge) affiche = charge; }
 
-        // s'arreter vers 2/3 assez longtemps -> ouvre le menu cache (67)
+        // stop around 2/3 long enough -> opens the hidden menu (67)
         if (charge >= SECRET_LO && charge <= SECRET_HI) {
             if (zoneDebut == 0) zoneDebut = millis();
             if (millis() - zoneDebut >= SECRET_MS) lanceSecret();
@@ -103,17 +103,17 @@ void dice_update() {
             zoneDebut = 0;
         }
 
-        // anneau vide depuis 10 s -> retour au repos
+        // ring empty for 10 s -> back to idle
         if (charge == 0 && millis() - lastInput >= ATTRACT_MS) versAttente();
 
     } else if (phase == REVEAL) {
         if (millis() - revDebut >= (uint32_t)revMs) {
-            if (special) versAttente();          // le 67 revient seul au repos
+            if (special) versAttente();          // the 67 goes back to idle on its own
             else { phase = CHARGE; charge = 0; affiche = 0; zoneDebut = 0; }
         }
     }
 
-    if (flash > 0) flash -= 5;                   // le flash s'estompe
+    if (flash > 0) flash -= 5;                   // the flash fades out
 }
 
 DiceView dice_view() {
@@ -143,16 +143,16 @@ DiceView dice_view() {
     if (v.dwell > 100) v.dwell = 100;
 
     v.montreNombre = montre;
-    v.attractAge   = (int)(millis() - attractStart);           // continue meme apres (fondu lisse)
+    v.attractAge   = (int)(millis() - attractStart);           // keeps going even after (smooth fade)
     if (v.attractAge < 0) v.attractAge = 0;
 
-    // Conseils : apparition douce a l'arrivee, disparition RAPIDE des qu'on tourne.
+    // Tips : soft fade-in on arrival, FAST fade-out as soon as you turn.
     if (phase == ATTRACT)                            v.attractFade = (int)((millis() - attractStart) * 100 / FADE_MS);
     else if (millis() - attractLeft < ATTRACT_OUT_MS) v.attractFade = 100 - (int)((millis() - attractLeft) * 100 / ATTRACT_OUT_MS);
     else                                             v.attractFade = 0;
     if (v.attractFade > 100) v.attractFade = 100; if (v.attractFade < 0) v.attractFade = 0;
 
-    // Le nombre se fond juste avant de partir au repos, ou a la fin du 67 secret.
+    // The number fades just before going idle, or at the end of the secret 67.
     v.numFade = 100;
     if (phase == CHARGE && charge == 0) {
         uint32_t idle = millis() - lastInput;

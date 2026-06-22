@@ -6,17 +6,17 @@
 #include "dice.h"
 
 // ===== DYCE =====
-// Anneau de charge : tu spin pour remplir l'anneau, au sommet ca tire un nombre.
-// Sens inverse : change la rarete N. Pause vers 2/3 : arme un nombre special.
-// Tout est non-bloquant (millis), 100% hors-ligne.
+// Charge ring : you spin to fill the ring, at the top it rolls a number.
+// Other way : changes the rarity N. Pause around 2/3 : arms a special number.
+// Everything is non-blocking (millis), 100% offline.
 
-Encoder enc(PIN_ENC_A, PIN_ENC_B);   // encodeur en anneau
+Encoder enc(PIN_ENC_A, PIN_ENC_B);   // ring encoder
 
 void setup() {
-    Serial.begin(115200);     // hasard materiel (esp_random)
-    ui_begin(SCREEN_ROTATION);       // ecran + sprite plein ecran
+    Serial.begin(115200);     // hardware randomness (esp_random)
+    ui_begin(SCREEN_ROTATION);       // screen + fullscreen sprite
     enc.begin();
-    dice_begin();     // premier tirage + intro
+    dice_begin();     // first roll + intro
 }
 
 void loop() {

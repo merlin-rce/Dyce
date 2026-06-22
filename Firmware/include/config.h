@@ -1,39 +1,39 @@
 #pragma once
 
-// ===== Reglages DYCE =====
-//Screen rotation (0, 1, 2, 3) : 0 = portrait, 1 = paysage, 2 = portrait inverse, 3 = paysage inverse
+// ===== DYCE settings =====
+//Screen rotation (0, 1, 2, 3) : 0 = portrait, 1 = landscape, 2 = portrait flipped, 3 = landscape flipped
 #define SCREEN_ROTATION 0
 
-// Broches encodeur
+// Encoder pins
 #define PIN_ENC_A 6
 #define PIN_ENC_B 5
-#define ENC_DIR   1        // sens de rotation (-1 pour inverser)
+#define ENC_DIR   1        // turn direction (-1 to flip)
 
-// Categories "1 in N" (anti-horaire pour changer). Apres la derniere valeur
-// vient la categorie "Contact" (index = N_COUNT) qui affiche un QR code.
+// "1 in N" categories (counter-clockwise to change). After the last value
+// comes the "Contact" category (index = N_COUNT) that shows a QR code.
 static const int N_VALUES[] = { 2, 5, 10, 50, 99 };
 static const int N_COUNT    = 5;
-#define N_START 1          // demarre sur le 5
+#define N_START 1          // starts on the 5
 
-// Remplissage de l'anneau : gros pas en bas, petits en haut -> peu de crans
+// Ring fill : big steps at the bottom, small at the top -> few notches
 #define STEP_MAX_INC 28
 #define STEP_MIN_INC 10
-#define FILL_SPEED   8     // vitesse de remplissage affiche
-#define FRAME_MS     33    // rafraichissement (~30 fps)
-#define COOLDOWN_MS  250   // mini tempo apres un tirage (spam ok, mais pas a l'exces)
+#define FILL_SPEED   8     // shown fill speed
+#define FRAME_MS     33    // refresh (~30 fps)
+#define COOLDOWN_MS  250   // small delay after a roll (spam ok, but not too much)
 
-// Reveal : anim puis le nombre reste un peu, puis ca s'efface
+// Reveal : anim then the number stays a bit, then it clears
 #define REVEAL_MS  2500
 
-// Secret : s'arreter vers 2/3 -> tombe sur 67
+// Secret : stop around 2/3 -> lands on 67
 #define SECRET_LO 55
 #define SECRET_HI 80
 #define SECRET_MS 1500
 
-// Intro de boot + mode attente
-#define INTRO_MS   4500    // intro film, rythmee
-#define ATTRACT_MS 10000   // sans rien toucher -> efface le nombre, retour aux conseils
-#define FADE_MS    900     // apparition douce des conseils
-#define ATTRACT_OUT_MS 250 // disparition rapide des conseils quand on commence a tourner
-#define FIRST_MS   8000    // le tout 1er conseil reste plus longtemps
-#define HEHE_MS    6000    // le 67 secret reste affiche ce temps puis disparait
+// Boot intro + idle mode
+#define INTRO_MS   4500    // intro movie, paced
+#define ATTRACT_MS 10000   // without touching anything -> clears the number, back to the tips
+#define FADE_MS    900     // soft fade-in of the tips
+#define ATTRACT_OUT_MS 250 // fast fade-out of the tips when you start turning
+#define FIRST_MS   8000    // the very 1st tip stays longer
+#define HEHE_MS    6000    // the secret 67 stays shown this long then disappears
