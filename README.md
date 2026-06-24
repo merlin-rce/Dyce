@@ -78,7 +78,7 @@ quick honest part: im 17 and still a student, and this started as a school proje
 
 the hardware is fully me: the pcb, the schematic, picking the parts, the cad, the soldering and all the debugging that comes with it. pretty proud of that part. the web simulator was mostly built with claude (ai) since my react/html is still basic. for the firmware i use ai to help me too, but as a beginner i really try to understand what im doing and learn from it, not just blindly copy paste.
 
-and if you notice theres barely any commits, its just cause im still new to github and kinda pushed everything at once. still learning that part too :)
+and if you notice theres barely any commits, its just cause im still new to github and kinda pushed everything at once. still learning that part too
 
 ## Contribute
 
